@@ -1,29 +1,25 @@
 const Category = require("./model");
-const policyFor = require("../policy");
+// const policyFor = require("../policy");
 
 module.exports = {
   createCategory: async (req, res, next) => {
     try {
-      // cek policy
-      const policy = policyFor(req.user);
+      // // cek policy
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("create", "Category")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("create", "Category")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
-      // (1) tangkap data form yang dikirimkan oleh client sebagai variable "payload"
       const payload = req.body;
 
-      // (2) membuat category baru dengan model Category
       const category = new Category(payload);
 
-      // (3) simpan category kedalam mongodb
       await category.save();
 
-      // (4) response ke client dengan category yang baru dibuat
       return res.json({
         error: 0,
         message: "Category successfully added.",
@@ -38,7 +34,7 @@ module.exports = {
           fields: err.errors,
         });
       }
-      // error yang tidak diketahui / ditangani oleh express
+
       next(err);
     }
   },
@@ -60,15 +56,15 @@ module.exports = {
   },
   updateCategory: async (req, res, next) => {
     try {
-      // cek policy
-      const policy = policyFor(req.user);
+      // // cek policy
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("update", "Category")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("update", "Category")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
       const payload = req.body;
 
@@ -97,20 +93,18 @@ module.exports = {
   },
   deleteCategory: async (req, res, next) => {
     try {
-      // cek policy
-      const policy = policyFor(req.user);
+      // // cek policy
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("delete", "Category")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("delete", "Category")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
-      // cari dan delete category berdasarkan fields _id
       const category = await Category.findOneAndDelete({ _id: req.params.id });
 
-      // respon ke client dengan data category yang baru saja dihapus
       return res.json({
         message: "Category successfully deleted.",
         data: category,

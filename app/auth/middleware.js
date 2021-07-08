@@ -23,7 +23,6 @@ module.exports = {
           });
         }
       } catch (err) {
-        // (1) tangani error yang terkait JsonWebTokenError
         if (err && err.name === "JsonWebTokenError") {
           return res.json({
             error: 1,
@@ -31,7 +30,6 @@ module.exports = {
           });
         }
 
-        // (2) tangani error lainnya
         next(err);
       }
       next();

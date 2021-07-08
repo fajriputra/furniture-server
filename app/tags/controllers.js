@@ -1,18 +1,18 @@
 const Tag = require("./model");
-const policyFor = require("../policy");
+// const policyFor = require("../policy");
 
 module.exports = {
   createTag: async (req, res, next) => {
     try {
-      // cek policy
-      const policy = policyFor(req.user);
+      // // cek policy
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("create", "Tag")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("create", "Tag")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
       const payload = req.body;
 
@@ -53,15 +53,15 @@ module.exports = {
   },
   updateTag: async (req, res, next) => {
     try {
-      // cek policy
-      const policy = policyFor(req.user);
+      // // cek policy
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("update", "Tag")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("update", "Tag")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
       const payload = req.body;
 
@@ -89,20 +89,18 @@ module.exports = {
   },
   deleteTag: async (req, res, next) => {
     try {
-      // cek policy
-      const policy = policyFor(req.user);
+      // // cek policy
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("delete", "Tag")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("delete", "Tag")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
-      // cari dan delete category berdasarkan fields _id
       const tag = await Tag.findOneAndDelete({ _id: req.params.id });
 
-      // respon ke client dengan data category yang baru saja dihapus
       return res.json({
         message: "Tag successfully deleted.",
         data: tag,

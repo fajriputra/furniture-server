@@ -16,10 +16,8 @@ module.exports = {
       const payload = req.body;
       const user = req.user;
 
-      // membuat instance deliveryaddress berdasarkan payload dan data user
       const address = new DeliveryAddress({ ...payload, user: user._id });
 
-      // simpan instance ke dalam mongodb
       await address.save();
 
       return res.json({
@@ -87,19 +85,15 @@ module.exports = {
     try {
       let { id } = req.params;
 
-      // buat payload dan keluarkan _id
       let { _id, ...payload } = req.body;
 
-      // cari address berdasarkan id
       let address = await DeliveryAddress.findOne({ _id: id });
 
-      // cek prop user_id apakah nilainya sama dengan user._id
       let subjectAddress = subject("DeliveryAddress", {
         ...address,
         user_id: address.user,
       });
 
-      // jika tidak, proses error
       if (!policy.can("update", subjectAddress)) {
         return res.json({
           error: 1,
@@ -107,11 +101,10 @@ module.exports = {
         });
       }
 
-      // update ke MongoDB
       address = await DeliveryAddress.findOneAndUpdate({ _id: id }, payload, {
         new: true,
       });
-      // mengirim response data ke client
+
       return res.json({
         message: "Address successfully updated.",
         data: address,
@@ -135,10 +128,8 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      // cari address berdasarkan id
       const address = await DeliveryAddress.findOne({ _id: id });
 
-      // buat subject address
       const subjectAddress = subject({ ...address, user: address.user });
 
       if (!policy.can("delete", subjectAddress)) {

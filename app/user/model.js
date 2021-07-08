@@ -7,7 +7,7 @@ const HASH_ROUND = 10;
 
 let userSchema = Schema(
   {
-    full_name: {
+    name: {
       type: String,
       required: [true, "Nama harus diisi"],
       maxlength: [255, "Panjang nama harus antara 3 - 255 karakter"],
