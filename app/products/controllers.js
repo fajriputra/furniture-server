@@ -5,31 +5,27 @@ const config = require("../config");
 const Product = require("./model");
 const Category = require("../category/model");
 const Tag = require("../tags/model");
-// const policyFor = require("../policy");
+const policyFor = require("../policy");
 
 module.exports = {
   createProduct: async (req, res, next) => {
-    // cek policy
-    // const policy = policyFor(req.user);
-
-    // if (!policy.can("create", "Product")) {
-    //   return res.json({
-    //     error: 1,
-    //     message: "You're not allowed to perform this action",
-    //   });
-    // }
     try {
+      // cek policy
+      const policy = policyFor(req.user);
+
+      if (!policy.can("create", "Product")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
       let payload = req.body;
 
-      if (payload.category) {
-        let category = await Category.findOne({
-          name: { $regex: payload.category, $options: "i" },
-        });
+      if (payload.category && payload.category.length) {
+        let category = await Category.find({ name: { $in: payload.category } });
 
-        if (category) {
-          payload = { ...payload, category: category._id };
-        } else {
-          delete payload.category;
+        if (category.length) {
+          payload = { ...payload, category: category.map((ctg) => ctg._id) };
         }
       }
 
@@ -86,11 +82,11 @@ module.exports = {
   },
   listProduct: async (req, res, next) => {
     try {
-      const {
+      let {
         limit = 10,
         skip = 0,
         q = "",
-        category = "",
+        category = [],
         tags = [],
       } = req.query;
 
@@ -101,18 +97,20 @@ module.exports = {
       }
 
       if (category.length) {
-        category = await Category.findOne({
-          name: { $regex: `${category}` },
-          $options: "i",
+        category = await Category.find({
+          name: { $regex: `${category}`, $options: "i" },
         });
 
-        if (category) {
-          criteria = { ...criteria, category: category._id };
-        }
+        criteria = {
+          ...criteria,
+          category: { $in: category.map((ctg) => ctg._id) },
+        };
       }
 
       if (tags.length) {
-        tags = await Tag.find({ name: { $in: tags } });
+        tags = await Tag.find({
+          name: { $regex: `${tags}`, $options: "i" },
+        });
 
         criteria = { ...criteria, tags: { $in: tags.map((tag) => tag._id) } };
       }
@@ -123,8 +121,8 @@ module.exports = {
         .limit(parseInt(limit))
         .skip(parseInt(skip))
         .populate("category")
-        .populate("tags")
-        .select("-__v");
+        .populate("tags");
+      // .select("-__v");
 
       return res.json({ data: products, count });
     } catch (err) {
@@ -132,27 +130,23 @@ module.exports = {
     }
   },
   updateProduct: async (req, res, next) => {
-    // cek policy
-    // const policy = policyFor(req.user);
-
-    // if (!policy.can("update", "Product")) {
-    //   return res.json({
-    //     error: 1,
-    //     message: "You're not allowed to perform this action",
-    //   });
-    // }
     try {
+      // cek policy
+      const policy = policyFor(req.user);
+
+      if (!policy.can("update", "Product")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
       let payload = req.body;
 
-      if (payload.category) {
-        let category = await Category.findOne({
-          name: { $regex: payload.category, $options: "i" },
-        });
+      if (payload.category && payload.category.length) {
+        let category = await Category.find({ name: { $in: payload.category } });
 
-        if (category) {
-          payload = { ...payload, category: category._id };
-        } else {
-          delete payload.category;
+        if (category.length) {
+          payload = { ...payload, category: category.map((ctg) => ctg._id) };
         }
       }
 
@@ -225,14 +219,14 @@ module.exports = {
   deleteProduct: async (req, res, next) => {
     try {
       // cek policy
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("delete", "Product")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("delete", "Product")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
 
       let product = await Product.findOneAndDelete({ _id: req.params.id });
 
