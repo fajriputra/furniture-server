@@ -5,7 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
 
-// const { decodeToken } = require("./app/auth/middleware");
+const { decodeToken } = require("./app/auth/middleware");
 
 // (1) import router product
 const productRouter = require("./app/products/router");
@@ -42,7 +42,7 @@ app.use("/api", orderRouter);
 app.use("/api", invoiceRouter);
 
 app.use(cors());
-// app.use(decodeToken());
+app.use(decodeToken());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
