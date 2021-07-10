@@ -1,14 +1,17 @@
 // (1) import package mongoose
 const mongoose = require("mongoose");
-const { dbHost, dbPort, dbName } = require("../app/config");
+const { dbUser, dbPass, dbName } = require("../app/config");
 
 // (3) connect to mongodb
-mongoose.connect(`mongodb://${dbHost}:${dbPort}/${dbName}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-});
+mongoose.connect(
+  `mongodb://${dbUser}:${dbPass}@cluster0-shard-00-00.emeay.mongodb.net:27017,cluster0-shard-00-01.emeay.mongodb.net:27017,cluster0-shard-00-02.emeay.mongodb.net:27017/${dbName}?ssl=true&replicaSet=atlas-g39jzr-shard-0&authSource=admin&retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  }
+);
 
 // (4) simpan koneksi dalam variable db
 const db = mongoose.connection;
