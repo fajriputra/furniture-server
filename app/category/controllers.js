@@ -1,5 +1,5 @@
 const Category = require("./model");
-// const policyFor = require("../policy");
+const policyFor = require("../policy");
 
 module.exports = {
   createCategory: async (req, res, next) => {
