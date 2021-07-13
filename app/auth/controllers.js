@@ -57,7 +57,7 @@ module.exports = {
       if (!user)
         return res.json({
           error: 1,
-          message: "incorrect email or password",
+          message: "Incorrect email or password",
         });
 
       let signed = jwt.sign(user, config.secretKey);

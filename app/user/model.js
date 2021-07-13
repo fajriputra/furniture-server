@@ -50,7 +50,7 @@ userSchema.path("email").validate(
       throw err;
     }
   },
-  (attr) => `${attr.value} sudah terdaftar`
+  (attr) => `${attr.value} already registered`
 );
 
 userSchema.path("email").validate(
@@ -58,7 +58,7 @@ userSchema.path("email").validate(
     const emailRE = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     return emailRE.test(value);
   },
-  (attr) => `${attr.value} harus merupakan email yang valid!`
+  (attr) => `${attr.value} must be a valid email address`
 );
 
 userSchema.pre("save", function (next) {
