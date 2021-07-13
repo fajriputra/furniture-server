@@ -44,7 +44,7 @@ let userSchema = Schema(
 userSchema.path("email").validate(
   async function (value) {
     try {
-      const count = await this.model("User").count({ email: value });
+      const count = await this.model("User").countDocuments({ email: value });
       return !count;
     } catch (err) {
       throw err;
