@@ -19,6 +19,7 @@ module.exports = {
           message: "You're not allowed to perform this action",
         });
       }
+
       let payload = req.body;
 
       if (payload.category && payload.category.length) {
@@ -56,7 +57,10 @@ module.exports = {
         src.on("end", async () => {
           let product = new Product({ ...payload, image_url: filename });
           await product.save();
-          return res.json(product);
+          return res.json({
+            data: product,
+            message: "Product successfully created",
+          });
         });
 
         src.on("error", async () => {
@@ -65,10 +69,12 @@ module.exports = {
       } else {
         let product = new Product(payload);
         await product.save();
-        return res.json(product);
+        return res.json({
+          data: product,
+          message: "Product successfully created",
+        });
       }
     } catch (err) {
-      // ----- cek tipe error ---- //
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
@@ -80,6 +86,7 @@ module.exports = {
       next(err);
     }
   },
+
   listProduct: async (req, res, next) => {
     try {
       let {
@@ -129,9 +136,9 @@ module.exports = {
       next(err);
     }
   },
+
   updateProduct: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("update", "Product")) {
@@ -189,7 +196,10 @@ module.exports = {
             { new: true, runValidators: true }
           );
 
-          return res.json(product);
+          return res.json({
+            data: product,
+            message: "Product successfully updated",
+          });
         });
 
         src.on("error", async () => {
@@ -202,7 +212,10 @@ module.exports = {
           { new: true, runValidators: true }
         );
 
-        return res.json(product);
+        return res.json({
+          data: product,
+          message: "Product successfully updated",
+        });
       }
     } catch (err) {
       if (err && err.name === "ValidationError") {
@@ -216,9 +229,9 @@ module.exports = {
       next(err);
     }
   },
+
   deleteProduct: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("delete", "Product")) {
@@ -237,7 +250,7 @@ module.exports = {
       }
 
       return res.json({
-        message: "Product successfully deleted.",
+        message: "Product successfully deleted",
         data: product,
       });
     } catch (err) {

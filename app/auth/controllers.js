@@ -31,6 +31,7 @@ module.exports = {
       next(err);
     }
   },
+
   localStrategy: async (email, password, done) => {
     try {
       let user = await User.findOne({ email }).select(
@@ -50,8 +51,9 @@ module.exports = {
 
     done();
   },
+
   login: async (req, res, next) => {
-    passport.authenticate("local", async function (err, user) {
+    passport.authenticate("local", async (err, user) => {
       if (err) return next(err);
 
       if (!user)
@@ -75,6 +77,7 @@ module.exports = {
       });
     })(req, res, next);
   },
+
   me: async (req, res, next) => {
     if (!req.user) {
       return res.json({
@@ -85,6 +88,7 @@ module.exports = {
 
     return res.json(req.user);
   },
+
   logout: async (req, res, next) => {
     let token = getToken(req);
 

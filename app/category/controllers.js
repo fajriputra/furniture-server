@@ -22,7 +22,7 @@ module.exports = {
 
       return res.json({
         error: 0,
-        message: "Category successfully added.",
+        message: "Category successfully added",
         data: category,
       });
     } catch (err) {
@@ -56,7 +56,6 @@ module.exports = {
   },
   updateCategory: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("update", "Category")) {
@@ -77,7 +76,7 @@ module.exports = {
       await category.save();
 
       return res.json({
-        message: "Category successfully updated.",
+        message: "Category successfully updated",
         data: category,
       });
     } catch (err) {
@@ -93,7 +92,6 @@ module.exports = {
   },
   deleteCategory: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("delete", "Category")) {
@@ -106,7 +104,7 @@ module.exports = {
       const category = await Category.findOneAndDelete({ _id: req.params.id });
 
       return res.json({
-        message: "Category successfully deleted.",
+        message: "Category successfully deleted",
         data: category,
       });
     } catch (err) {

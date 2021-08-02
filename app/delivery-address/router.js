@@ -3,21 +3,21 @@ const multer = require("multer");
 
 const addressController = require("./controllers");
 
-router.get("/delivery-address", addressController.getAddress);
 router.post(
   "/delivery-address",
   multer().none(),
-  addressController.createDelivAddress
+  addressController.createAddress
 );
+router.get("/delivery-address", addressController.getAddress);
 router.put(
   "/delivery-address/:id",
   multer().none(),
-  addressController.updateDeliveryAddress
+  addressController.updateAddress
 );
 router.delete(
   "/delivery-address/:id",
 
-  addressController.deleteDeliveryAddress
+  addressController.deleteAddress
 );
 
 module.exports = router;

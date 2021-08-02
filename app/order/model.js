@@ -18,18 +18,18 @@ const orderSchema = Schema(
     },
 
     delivery_address: {
-      provinsi: { type: String, required: [true, "provinsi must be filled."] },
+      provinsi: { type: String, required: [true, "Provinsi is required"] },
       kabupaten: {
         type: String,
-        required: [true, "kabupaten must be filled."],
+        required: [true, "Kabupaten is required"],
       },
       kecamatan: {
         type: String,
-        required: [true, "kecamatan must be filled."],
+        required: [true, "Kecamatan is required"],
       },
       kelurahan: {
         type: String,
-        required: [true, "kelurahan must be filled."],
+        required: [true, "Kelurahan is required"],
       },
       detail: { type: String },
     },
@@ -53,14 +53,14 @@ orderSchema.virtual("items_count").get(function () {
   }, 0);
 });
 
-orderSchema.post("save", async () => {
-  let sub_total = this.order_items.reduce(
+orderSchema.post("save", async function () {
+  const sub_total = this.order_items.reduce(
     (sum, item) => (sum += item.price * item.qty),
     0
   );
 
-  // (1) buat objek `invoice` baru
-  let invoice = new Invoice({
+  // buat objek `invoice` baru
+  const invoice = new Invoice({
     user: this.user,
     order: this._id,
     sub_total: sub_total,
@@ -69,7 +69,7 @@ orderSchema.post("save", async () => {
     delivery_address: this.delivery_address,
   });
 
-  // (2) simpan ke MongoDB
+  // simpan ke database
   await invoice.save();
 });
 

@@ -6,8 +6,9 @@ const productSchema = Schema(
   {
     name: {
       type: String,
-      minlength: [3, "Panjang nama makanan minimal 3 karakter"],
-      required: [true, "Nama makanan harus diisi"],
+      required: [true, "Product is required"],
+      minlength: [3, "Product must be at least 3 characters"],
+      maxlength: [16, "Product already exceeds 16 characters"],
     },
 
     description: {
@@ -16,7 +17,8 @@ const productSchema = Schema(
 
     price: {
       type: Number,
-      default: 0,
+      required: [true, "Price is required"],
+      min: [1000, "Minimum price is 1000"],
     },
 
     image_url: String,

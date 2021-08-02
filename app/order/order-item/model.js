@@ -4,19 +4,21 @@ const { model, Schema } = mongoose;
 const orderItemSchema = Schema({
   name: {
     type: String,
-    minlength: [5, "Panjang nama makanan minimal 50 karakter"],
-    required: [true, "name must be filled"],
+    required: [true, "Product is required"],
+    minlength: [3, "Product must be at least 3 characters"],
+    maxlength: [16, "Product already exceeds 16 characters"],
   },
 
   price: {
     type: Number,
-    required: [true, "Harga item harus diisi"],
+    required: [true, "Price is required"],
+    min: [1000, "Minimum price is 1000"],
   },
 
   qty: {
     type: Number,
-    required: [true, "Kuantitas harus diisi"],
-    min: [1, "Kuantitas minimal 1"],
+    required: [true, "Qty is required"],
+    min: [1, "Minimum qty is 1"],
   },
 
   product: {

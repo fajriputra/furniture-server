@@ -5,34 +5,34 @@ const invoiceSchema = Schema(
   {
     sub_total: {
       type: Number,
-      required: [true, "sub_total must be filled"],
+      required: [true, "sub_total is required"],
     },
 
     delivery_fee: {
       type: Number,
-      required: [true, "delivery_fee must be filled"],
+      required: [true, "delivery_fee is required"],
     },
 
     delivery_address: {
-      provinsi: { type: String, required: [true, "provinsi must be filled."] },
+      provinsi: { type: String, required: [true, "Provinsi is required"] },
       kabupaten: {
         type: String,
-        required: [true, "kabupaten must be filled."],
+        required: [true, "Kabupaten is required"],
       },
       kecamatan: {
         type: String,
-        required: [true, "kecamatan must be filled."],
+        required: [true, "Kecamatan is required"],
       },
       kelurahan: {
         type: String,
-        required: [true, "kelurahan must be filled."],
+        required: [true, "Kelurahan is required"],
       },
       detail: { type: String },
     },
 
     total: {
       type: Number,
-      required: [true, "total must be filled"],
+      required: [true, "total is required"],
     },
 
     payment_status: {

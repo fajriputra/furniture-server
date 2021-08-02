@@ -1,10 +1,8 @@
 const Tag = require("./model");
-// const policyFor = require("../policy");
 
 module.exports = {
   createTag: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("create", "Tag")) {
@@ -53,7 +51,6 @@ module.exports = {
   },
   updateTag: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("update", "Tag")) {
@@ -89,7 +86,6 @@ module.exports = {
   },
   deleteTag: async (req, res, next) => {
     try {
-      // cek policy
       const policy = policyFor(req.user);
 
       if (!policy.can("delete", "Tag")) {
@@ -102,7 +98,7 @@ module.exports = {
       const tag = await Tag.findOneAndDelete({ _id: req.params.id });
 
       return res.json({
-        message: "Tag successfully deleted.",
+        message: "Tag successfully deleted",
         data: tag,
       });
     } catch (err) {

@@ -1,14 +1,13 @@
 const mongoose = require("mongoose");
 const Order = require("./model");
-const OrderItem = require("../order-item/model");
-const CartItem = require("../cart-item/model");
+const OrderItem = require("./order-item/model");
+const CartItem = require("../cart/cart-item/model");
 const DeliveryAddress = require("../delivery-address/model");
 const { policyFor } = require("../policy");
-// const { subject } = require("@casl/ability");
 
 module.exports = {
   createOrder: async (req, res, next) => {
-    let policy = policyFor(req.user);
+    const policy = policyFor(req.user);
 
     if (!policy.can("create", "Create")) {
       return res.json({
@@ -18,13 +17,14 @@ module.exports = {
     }
 
     try {
-      let { delivery_fee, delivery_address } = req.body;
+      const { delivery_fee, delivery_address } = req.body;
 
-      // dapatkan items di cart
-      let items = await CartItem.find({ user: req.user._id }).populate(
+      // cari & ambil product dari user yang sedang login
+      const items = await CartItem.find({ user: req.user._id }).populate(
         "product"
       );
 
+      // cart kosong
       if (!items.length) {
         return res.json({
           error: 1,
@@ -32,9 +32,11 @@ module.exports = {
         });
       }
 
-      let address = await DeliveryAddress.findOne({ _id: delivery_address });
+      // mencari data alamat berdasarkan _id dari si address
+      const address = await DeliveryAddress.findOne({ _id: delivery_address });
 
-      let order = new Order({
+      // buat order baru
+      const order = new Order({
         _id: new mongoose.Types.Object(),
         status: "waiting_payment",
         delivery_fee,
@@ -48,7 +50,8 @@ module.exports = {
         user: req.user._id,
       });
 
-      let orderItems = await OrderItem.insertMany(
+      // buat order items yang sudah didapat sebelumnya
+      const orderItems = await OrderItem.insertMany(
         items.map((item) => ({
           ...item,
           name: item.product.name,
@@ -61,8 +64,10 @@ module.exports = {
 
       orderItems.forEach((item) => order.order_items.push(item));
 
+      // simpan order
       await order.save();
 
+      // clear cart dari user yang sudah melakukan order
       await CartItem.deleteMany({ user: req.user._id });
 
       return res.json(order);
@@ -77,6 +82,7 @@ module.exports = {
       next(err);
     }
   },
+
   listOrder: async (req, res, next) => {
     let policy = policyFor(req.user);
 
@@ -88,15 +94,18 @@ module.exports = {
     }
 
     try {
-      let { limit = 10, skip = 0 } = req.query;
+      // ambil limit, skip dari query
+      const { limit = 10, skip = 0 } = req.query;
 
-      let count = await Order.find({ user: req.user._id }).countDocuments();
+      // kalkulasi semua order dari user
+      const count = await Order.find({ user: req.user._id }).countDocuments();
 
-      let orders = await Order.find({ user: req.user._id })
+      // data orders
+      const orders = await Order.find({ user: req.user._id })
         .limit(parseInt(limit))
         .skip(parseInt(skip))
-        .populate("order_items")
-        .sort("-createdAt");
+        .populate("order_items") // mengambil data order items terkait order
+        .sort("-createdAt"); // sortir berdasarkan tanggal pesanan secara desc
 
       return res.json({
         data: orders.map((order) => order.toJSON({ virtuals: true })),

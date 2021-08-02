@@ -1,6 +1,6 @@
-const CartItem = require("../cart-item/model");
-const { policyFor } = require("../policy");
+const CartItem = require("./cart-item/model");
 const Product = require("../products/model");
+const { policyFor } = require("../policy");
 
 module.exports = {
   updateCart: async (req, res, next) => {
@@ -16,17 +16,22 @@ module.exports = {
     try {
       const { items } = req.body;
 
-      const productsId = items.map((item) => item._id);
+      // ambil _id dari masing2 item product
+      const productsId = items.map((item) => item.product._id);
 
+      // cari data product ke database
       const products = await Product.find({ _id: { $in: productsId } });
 
-      let cartItems = items.map((item) => {
-        let relatedProduct = products.find(
-          (product) => product._id.toString() === item._id
+      // data cartItems
+      const cartItems = items.map((item) => {
+        /* cari related product dari products berdasarkan
+          id product & cek sama atau tidak dengan id dari item product yang ditambahkan */
+        const relatedProduct = products.find(
+          (product) => product._id.toString() === item.product._id
         );
 
+        // buat objek yang memuat informasi untuk disimpan sebagai CartItem
         return {
-          _id: relatedProduct._id,
           product: relatedProduct._id,
           price: relatedProduct.price,
           image_url: relatedProduct.image_url,
@@ -36,6 +41,7 @@ module.exports = {
         };
       });
 
+      // lakukan update ke collections cartItems secara bulk/serentak
       await CartItem.bulkWrite(
         cartItems.map((item) => {
           return {
@@ -48,6 +54,7 @@ module.exports = {
         })
       );
 
+      // respon data ke client
       return res.json({
         message: "Succesfully added to cart",
         data: cartItems,
@@ -66,7 +73,7 @@ module.exports = {
   },
 
   listCart: async (req, res, next) => {
-    let policy = policyFor(req.user);
+    const policy = policyFor(req.user);
 
     if (!policy.can("read", "Cart")) {
       return res.json({
@@ -76,8 +83,9 @@ module.exports = {
     }
 
     try {
-      let items = await CartItem.find({ user: req.user._id }).populate(
-        "product"
+      // cari items cart berdasarkan user yang sedang login
+      const items = await CartItem.find({ user: req.user._id }).populate(
+        "product" // mengambil data product terkait cart
       );
 
       //   response ke client

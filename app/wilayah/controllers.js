@@ -21,12 +21,13 @@ module.exports = {
     const db_kabupaten = path.resolve(__dirname, "./data/regencies.csv");
 
     try {
-      let { kode_induk } = req.body;
+      const { kode_induk } = req.query;
 
       const data = await csv().fromFile(db_kabupaten);
 
       if (!kode_induk) {
         return res.json({
+          data,
           message: "The code is not available to search for regencies.",
         });
       }
@@ -46,12 +47,13 @@ module.exports = {
     const db_kecamatan = path.resolve(__dirname, "./data/districts.csv");
 
     try {
-      let { kode_induk } = req.body;
+      const { kode_induk } = req.query;
 
       const data = await csv().fromFile(db_kecamatan);
 
       if (!kode_induk) {
         return res.json({
+          data,
           message: "The code is not available to search for districts",
         });
       }
@@ -71,7 +73,7 @@ module.exports = {
     const db_desa = path.resolve(__dirname, "./data/villages.csv");
 
     try {
-      let { kode_induk } = req.body;
+      const { kode_induk } = req.query;
 
       const data = await csv().fromFile(db_desa);
 

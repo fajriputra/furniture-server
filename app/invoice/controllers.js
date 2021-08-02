@@ -6,19 +6,22 @@ const Invoice = require("./model");
 module.exports = {
   showInvoice: async (req, res, next) => {
     try {
-      let { order_id } = req.params;
+      const { order_id } = req.params;
 
-      let invoice = await Invoice.findOne({ order: order_id })
-        .populate("order")
-        .populate("user");
+      // data invoice berdasarkan order_id
+      const invoice = await Invoice.findOne({ order: order_id })
+        .populate("order") // mengambil data order terkait invoice
+        .populate("user"); // mengambil data user terkait invoice
 
-      let policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      let subjectInvoice = subject("Invoice", {
+      // cek berdasarkan invoice dari user
+      const subjectInvoice = subject("Invoice", {
         ...invoice,
         user_id: invoice.user._id,
       });
 
+      // tidak ada invoice
       if (!policy.can("read", subjectInvoice)) {
         return res.json({
           error: 1,
@@ -26,6 +29,7 @@ module.exports = {
         });
       }
 
+      // respon ke client
       return res.json(invoice);
     } catch (err) {
       return res.json({

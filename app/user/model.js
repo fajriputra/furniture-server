@@ -9,9 +9,9 @@ let userSchema = Schema(
   {
     name: {
       type: String,
-      required: [true, "Nama harus diisi"],
-      maxlength: [255, "Panjang nama harus antara 3 - 255 karakter"],
-      minlength: [3, "Panjang nama harus antara 3 - 255 karakter"],
+      required: [true, "Name is required"],
+      minlength: [3, "Name must be at least 3 characters"],
+      maxlength: [32, "Name already exceeds 32 characters"],
     },
 
     customer_id: {
@@ -20,14 +20,15 @@ let userSchema = Schema(
 
     email: {
       type: String,
-      required: [true, "Email harus diisi"],
-      maxlength: [255, "Panjang email maksimal 255 karakter"],
+      required: [true, "Email is required"],
+      minlengt: [3, "Email must be at least 3 characters"],
     },
 
     password: {
       type: String,
-      required: [true, "Password harus diisi"],
-      maxlength: [255, "Panjang password maksimal 255 karakter"],
+      required: [true, "Password is required"],
+      minlength: [6, "Password must be at least 6 characters"],
+      maxlength: [32, "Password already exceeds 16 characters"],
     },
 
     role: {
