@@ -104,7 +104,7 @@ module.exports = {
       const orders = await Order.find({ user: req.user._id })
         .limit(parseInt(limit))
         .skip(parseInt(skip))
-        .populate("order_items") // mengambil data order items terkait order
+        .populate("order_items") // mengambil data order items terkait orders
         .sort("-createdAt"); // sortir berdasarkan tanggal pesanan secara desc
 
       return res.json({

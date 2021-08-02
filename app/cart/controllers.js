@@ -30,7 +30,7 @@ module.exports = {
           (product) => product._id.toString() === item.product._id
         );
 
-        // buat objek yang memuat informasi untuk disimpan sebagai CartItem
+        // memuat informasi untuk disimpan sebagai CartItem
         return {
           product: relatedProduct._id,
           price: relatedProduct.price,
