@@ -58,6 +58,7 @@ LIST API = [{
 
   invoices: {
   - api/invoices/:order_id (get) 
+  - api/invoices/:order_id/initiate-payment (get)
   - -- data invoices berdasarkan order id 
   - -- mengambil data order terkait invoices 
   - -- mengambil data user terkait invoices
