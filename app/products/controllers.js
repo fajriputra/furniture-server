@@ -59,7 +59,7 @@ module.exports = {
           await product.save();
           return res.json({
             data: product,
-            message: "Product successfully created",
+            message: "Product successfully added",
           });
         });
 
@@ -71,14 +71,14 @@ module.exports = {
         await product.save();
         return res.json({
           data: product,
-          message: "Product successfully created",
+          message: "Product successfully added",
         });
       }
     } catch (err) {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Product unsuccessful added",
           fields: err.errors,
         });
       }
@@ -221,7 +221,7 @@ module.exports = {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Product unsuccessful updated",
           fields: err.errors,
         });
       }

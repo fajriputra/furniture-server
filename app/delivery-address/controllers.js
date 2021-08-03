@@ -30,7 +30,7 @@ module.exports = {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Address unsuccessful added",
           fields: err.errors,
         });
       }
@@ -122,7 +122,7 @@ module.exports = {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Address unsuccessful updated",
           fields: err.errors,
         });
       }

@@ -75,7 +75,7 @@ module.exports = {
       if (err && err.name == "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Failed to place order",
           fields: err.errors,
         });
       }

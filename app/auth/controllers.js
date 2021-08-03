@@ -11,7 +11,7 @@ module.exports = {
     try {
       const payload = req.body;
 
-      let user = new User(payload);
+      const user = new User(payload);
 
       await user.save();
 
@@ -23,7 +23,7 @@ module.exports = {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Registration is unsuccessful",
           fields: err.errors,
         });
       }
@@ -34,7 +34,7 @@ module.exports = {
 
   localStrategy: async (email, password, done) => {
     try {
-      let user = await User.findOne({ email }).select(
+      const user = await User.findOne({ email }).select(
         "-__v -createdAt -updatedAt -cart_items -token"
       );
 
@@ -56,13 +56,14 @@ module.exports = {
     passport.authenticate("local", async (err, user) => {
       if (err) return next(err);
 
-      if (!user)
+      if (!user) {
         return res.json({
           error: 1,
           message: "Incorrect email or password",
         });
+      }
 
-      let signed = jwt.sign(user, config.secretKey);
+      const signed = jwt.sign(user, config.secretKey);
 
       await User.findOneAndUpdate(
         { _id: user._id },
@@ -90,9 +91,9 @@ module.exports = {
   },
 
   logout: async (req, res, next) => {
-    let token = getToken(req);
+    const token = getToken(req);
 
-    let user = await User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       { token: { $in: [token] } },
       { $pull: { token } },
       { useFindAndModify: false }

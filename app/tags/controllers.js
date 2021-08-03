@@ -19,14 +19,14 @@ module.exports = {
       await tag.save();
 
       return res.json({
-        message: "Tag successfully added.",
+        message: "Tag successfully added",
         data: tag,
       });
     } catch (err) {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Tag unsuccessful added",
           fields: err.errors,
         });
       }
@@ -70,14 +70,14 @@ module.exports = {
       await tag.save();
 
       return res.json({
-        message: "Tag successfully updated.",
+        message: "Tag successfully updated",
         data: tag,
       });
     } catch (err) {
       if (err && err.name === "ValidationError") {
         return res.json({
           error: 1,
-          message: err.message,
+          message: "Tag unsuccessful updated",
           fields: err.errors,
         });
       }
