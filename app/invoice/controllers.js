@@ -1,11 +1,11 @@
 const { subject } = require("@casl/ability");
 const { policyFor } = require("../policy");
-const { Snap } = require("midtrans-client");
+const midtransClient = require("midtrans-client");
 const { midtrans } = require("../config");
 
 const Invoice = require("./model");
 
-const snap = new Snap({
+const snap = new midtransClient.Snap({
   isProduction: midtrans.isProduction,
   clientKey: midtrans.clientKey,
   serverKey: midtrans.serverKey,
