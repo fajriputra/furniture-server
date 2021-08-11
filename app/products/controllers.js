@@ -20,18 +20,22 @@ module.exports = {
         });
       }
 
-      let payload = req.body;
+      const payload = req.body;
 
-      if (payload.category && payload.category.length) {
-        let category = await Category.find({ name: { $in: payload.category } });
+      if (payload.category) {
+        const category = await Category.findOne({
+          name: { $regex: payload.category, $options: "i" },
+        });
 
-        if (category.length) {
-          payload = { ...payload, category: category.map((ctg) => ctg._id) };
+        if (category) {
+          payload = { ...payload, category: category._id };
+        } else {
+          delete payload.category;
         }
       }
 
       if (payload.tags && payload.tags.length) {
-        let tags = await Tag.find({ name: { $in: payload.tags } });
+        const tags = await Tag.find({ name: { $in: payload.tags } });
 
         if (tags.length) {
           payload = { ...payload, tags: tags.map((tag) => tag._id) };
@@ -93,7 +97,7 @@ module.exports = {
         limit = 10,
         skip = 0,
         q = "",
-        category = [],
+        category = "",
         tags = [],
       } = req.query;
 
@@ -104,14 +108,13 @@ module.exports = {
       }
 
       if (category.length) {
-        category = await Category.find({
+        category = await Category.findOne({
           name: { $regex: `${category}`, $options: "i" },
         });
 
-        criteria = {
-          ...criteria,
-          category: { $in: category.map((ctg) => ctg._id) },
-        };
+        if (category) {
+          criteria = { ...criteria, category: category._id };
+        }
       }
 
       if (tags.length) {
@@ -122,7 +125,7 @@ module.exports = {
         criteria = { ...criteria, tags: { $in: tags.map((tag) => tag._id) } };
       }
 
-      let count = await Product.find(criteria).countDocuments();
+      const count = await Product.find(criteria).countDocuments();
 
       const products = await Product.find(criteria)
         .limit(parseInt(limit))
@@ -147,18 +150,22 @@ module.exports = {
           message: "You're not allowed to perform this action",
         });
       }
-      let payload = req.body;
+      const payload = req.body;
 
-      if (payload.category && payload.category.length) {
-        let category = await Category.find({ name: { $in: payload.category } });
+      if (payload.category) {
+        const category = await Category.findOne({
+          name: { $regex: payload.category, $options: "i" },
+        });
 
-        if (category.length) {
-          payload = { ...payload, category: category.map((ctg) => ctg._id) };
+        if (category) {
+          payload = { ...payload, category: category._id };
+        } else {
+          delete payload.category;
         }
       }
 
       if (payload.tags && payload.tags.length) {
-        let tags = await Tag.find({ name: { $in: payload.tags } });
+        const tags = await Tag.find({ name: { $in: payload.tags } });
 
         if (tags.length) {
           payload = { ...payload, tags: tags.map((tag) => tag._id) };
