@@ -3,14 +3,14 @@ const Tag = require("./model");
 module.exports = {
   createTag: async (req, res, next) => {
     try {
-      const policy = policyFor(req.user);
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("create", "Tag")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("create", "Tag")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
       const payload = req.body;
 
@@ -51,14 +51,14 @@ module.exports = {
   },
   updateTag: async (req, res, next) => {
     try {
-      const policy = policyFor(req.user);
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("update", "Tag")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("update", "Tag")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
       const payload = req.body;
 
@@ -86,14 +86,14 @@ module.exports = {
   },
   deleteTag: async (req, res, next) => {
     try {
-      const policy = policyFor(req.user);
+      // const policy = policyFor(req.user);
 
-      if (!policy.can("delete", "Tag")) {
-        return res.json({
-          error: 1,
-          message: "You're not allowed to perform this action",
-        });
-      }
+      // if (!policy.can("delete", "Tag")) {
+      //   return res.json({
+      //     error: 1,
+      //     message: "You're not allowed to perform this action",
+      //   });
+      // }
 
       const tag = await Tag.findOneAndDelete({ _id: req.params.id });
 
