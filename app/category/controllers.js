@@ -5,14 +5,14 @@ module.exports = {
   createCategory: async (req, res, next) => {
     try {
       // cek policy
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("create", "Category")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("create", "Category")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
 
       const payload = req.body;
 
@@ -56,14 +56,14 @@ module.exports = {
   },
   updateCategory: async (req, res, next) => {
     try {
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("update", "Category")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("update", "Category")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
 
       const payload = req.body;
 
@@ -92,14 +92,14 @@ module.exports = {
   },
   deleteCategory: async (req, res, next) => {
     try {
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("delete", "Category")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("delete", "Category")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
 
       const category = await Category.findOneAndDelete({ _id: req.params.id });
 
