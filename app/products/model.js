@@ -8,7 +8,7 @@ const productSchema = Schema(
       type: String,
       required: [true, "Product is required"],
       minlength: [3, "Product must be at least 3 characters"],
-      maxlength: [16, "Product already exceeds 16 characters"],
+      maxlength: [32, "Product already exceeds 32 characters"],
     },
 
     description: {
