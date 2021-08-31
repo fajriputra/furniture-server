@@ -43,7 +43,7 @@ module.exports = {
     if (user && typeof policies[user.role] === "function") {
       policies[user.role](user, builder);
     } else {
-      policies["guest"]("user, builder");
+      policies["guest"](user, builder);
     }
 
     return new Ability(builder.rules);

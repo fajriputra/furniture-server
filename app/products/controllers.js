@@ -11,14 +11,14 @@ module.exports = {
   createProduct: async (req, res, next) => {
     try {
       // cek policy
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("create", "Product")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("create", "Product")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
 
       const payload = req.body;
 
@@ -142,14 +142,14 @@ module.exports = {
 
   updateProduct: async (req, res, next) => {
     try {
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("update", "Product")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("update", "Product")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
       const payload = req.body;
 
       if (payload.category) {
@@ -239,14 +239,14 @@ module.exports = {
 
   deleteProduct: async (req, res, next) => {
     try {
-      // const policy = policyFor(req.user);
+      const policy = policyFor(req.user);
 
-      // if (!policy.can("delete", "Product")) {
-      //   return res.json({
-      //     error: 1,
-      //     message: "You're not allowed to perform this action",
-      //   });
-      // }
+      if (!policy.can("delete", "Product")) {
+        return res.json({
+          error: 1,
+          message: "You're not allowed to perform this action",
+        });
+      }
 
       let product = await Product.findOneAndDelete({ _id: req.params.id });
 
